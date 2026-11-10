@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { Keypair } from "@solana/web3.js";
 import bs58 from "bs58";
-// @ts-ignore
+// @ts-ignore shamirs-secret-sharing has no @types package
 import * as sss from "shamirs-secret-sharing";
 
 // Master server key 
