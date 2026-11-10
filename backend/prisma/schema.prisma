@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String         @id @default(uuid())
+  email            String         @unique
+  passwordHash     String
+  solanaPublicKey  String         @unique
+  encryptedShare1  String         // Shamir Share 1 encrypted with SERVER_MASTER_KEY
+  telegramChatId   String?        @unique
+  telegramLinkCode String         @unique
+  demoSolBalance   Float          @default(10.0)
+  createdAt        DateTime       @default(now())
+  keyVault         KeyVault?
+  whales           TrackedWhale[]
+  trades           CopyTrade[]
+}
+
+model KeyVault {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  encryptedShare2 String   // Shamir Share 2 encrypted with User Auth Salt
+  userSalt        String
+  createdAt       DateTime @default(now())
+}
+
+model TrackedWhale {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  label        String
+  whaleAddress String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+model CopyTrade {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  whaleWallet String
+  tokenMint   String
+  amountSol   Float
+  outAmount   String
+  mode        String   // "MAINNET_LIVE" | "MAINNET_SIMULATED"
+  txSignature String
+  createdAt   DateTime @default(now())
+}
