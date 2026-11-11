@@ -1,8 +1,10 @@
-allowBuilds:
-  '@prisma/client': true
-  '@prisma/engines': true
-  bigint-buffer: set this to true or false
-  bufferutil: set this to true or false
-  esbuild: true
-  prisma: true
-  utf-8-validate: set this to true or false
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
+  - esbuild
+  - prisma
+
+ignoredBuiltDependencies:
+  - bigint-buffer
+  - bufferutil
+  - utf-8-validate
